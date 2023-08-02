@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPK.Configuration;
 
@@ -11,9 +12,11 @@ using WebAPK.Configuration;
 namespace WebAPK.Migrations
 {
     [DbContext(typeof(Web2DbContext))]
-    partial class Web2DbContextModelSnapshot : ModelSnapshot
+    [Migration("20230802142838_NewMigration")]
+    partial class NewMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

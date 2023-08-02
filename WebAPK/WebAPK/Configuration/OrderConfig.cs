@@ -16,6 +16,16 @@ namespace WebAPK.Configuration
             builder.Property(x => x.IsCancelled).IsRequired().HasDefaultValue(false);
             builder.Property(x => x.OrderPrice).IsRequired();
             builder.HasOne(x => x.User).WithMany(x => x.Orders).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasData(new Order
+            {
+                Id = 1,
+                DeliveryAddress = "adresa3",
+                DeliveryTime = DateTime.Now.AddMinutes(new Random().Next(240)),
+                IsCancelled = false,
+                UserId = 3,
+                OrderPrice = 700
+            });
         }
     }
 }

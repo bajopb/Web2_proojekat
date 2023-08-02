@@ -14,6 +14,17 @@ namespace WebAPK.Configuration
             builder.Property(x => x.Price).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.ProductId).IsRequired();
+            
+            builder.HasData(new Item
+            {
+                Id = 1,
+                ProductId = 1,
+                OrderId = 1,
+                Price = 100,
+                Amount = 5,
+                Name = "Item1"
+            });
+
         }
     }
 }
