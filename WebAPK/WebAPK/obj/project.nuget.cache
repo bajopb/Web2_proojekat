@@ -1,14 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "z/RUztPkyRcgALnml/yuB/693k8rxkfQsHXlWaY9NoAdjzIFOvA/pPYSHZAr5vPvybwoMXHfBaLYgpH3q+1qzg==",
+  "dgSpecHash": "xx+5fKqM4pgsVp/YO1nY71sXCB40LUXaa6Ad4I1wjmJPBhxzvIa+N0zwPibEnrw8sO1PWdPtmpE8tIpy3oRf0Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\nikola\\Desktop\\WEB2\\bajopb\\Web2_proojekat\\WebAPK\\WebAPK\\WebAPK.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\nikola\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\nikola\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\nikola\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\nikola\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\nikola\\.nuget\\packages\\bcrypt.net\\0.1.0\\bcrypt.net.0.1.0.nupkg.sha512",
     "C:\\Users\\nikola\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\nikola\\.nuget\\packages\\microsoft.aspnetcore.authentication.google\\6.0.20\\microsoft.aspnetcore.authentication.google.6.0.20.nupkg.sha512",
+    "C:\\Users\\nikola\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.20\\microsoft.aspnetcore.authentication.jwtbearer.6.0.20.nupkg.sha512",
     "C:\\Users\\nikola\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\nikola\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\nikola\\.nuget\\packages\\microsoft.data.sqlclient\\5.0.2\\microsoft.data.sqlclient.5.0.2.nupkg.sha512",
