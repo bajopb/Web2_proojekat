@@ -1,18 +1,75 @@
-﻿using WebAPK.DTO;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using WebAPK.Configuration;
+using WebAPK.DTO;
 using WebAPK.Interfaces;
+using WebAPK.Models;
 
 namespace WebAPK.Services
 {
     public class ProfileSerivice : IProfileService
     {
-        public Task<UserDTO> EditProfile(int profileID, UserDTO userDTO)
+
+        private readonly Web2DbContext _dbContext;
+        private readonly IMapper _mapper;
+        public ProfileSerivice(Web2DbContext dbContext, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+            _mapper = mapper;
+        }
+        public async Task<ResponseDTO> EditProfile(int profileID, ProfileEditDTO editDTO)
+        {
+            User u = await _dbContext.Users.FindAsync(profileID);
+            if (u == null) {
+                return new ResponseDTO("Profil ne postoji");
+            }
+            if (!string.IsNullOrEmpty(editDTO.NewPassword)) {
+                if (BCrypt.Net.BCrypt.Verify(u.Password, editDTO.OldPassword)) {
+                    return new ResponseDTO("Lozinke se ne poklapaju");
+                }
+                u.Password = BCrypt.Net.BCrypt.HashPassword(editDTO.NewPassword);
+            }
+            if (!string.IsNullOrEmpty(editDTO.Username)) {
+                if ((await _dbContext.Users.FirstOrDefaultAsync(x => x.Username == editDTO.Username) != null)){
+                    return new ResponseDTO("Korisnik sa tim korisnickim imenom vec postoji");
+                }
+                u.Username = editDTO.Username;
+            }
+            if (!string.IsNullOrEmpty(editDTO.Firstname))
+            {
+                u.Firstname = editDTO.Firstname;
+            }
+            if (!string.IsNullOrEmpty(editDTO.Lastname))
+            {
+                u.Lastname = editDTO.Lastname;
+
+            }
+            if (!string.IsNullOrEmpty(editDTO.Address))
+            {
+                u.Address = editDTO.Address;
+
+            }
+            if (editDTO.Birthday!=null || editDTO.Birthday!=default(DateTime))
+            {
+                u.Birthday = editDTO.Birthday;
+
+            }
+            if (editDTO.ImageFile != null)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    editDTO.ImageFile.CopyTo(ms);
+                    u.Image = ms.ToArray();
+                }
+            }
+            _dbContext.Users.Update(u);
+            await _dbContext.SaveChangesAsync();
+            return new ResponseDTO("Uspesna promena");
         }
 
-        public Task<UserDTO> ShowProfile(int profileID)
+        public async Task<UserDTO> ShowProfile(int profileID)
         {
-            throw new NotImplementedException();
+            return _mapper.Map<UserDTO>(await _dbContext.Users.FindAsync(profileID));
         }
     }
 }
