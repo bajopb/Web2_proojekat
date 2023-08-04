@@ -1,0 +1,51 @@
+
+.fullPageDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Podesite visinu po potrebi */
+  }
+  
+  .loginDiv {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .forms {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .labels {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .inputs {
+    padding: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .submitButton {
+    background-color: lightblue;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px; 
+  }
+  
+  /* Stil za link */
+  p a {
+    color: blue;
+    text-decoration: none;
+    margin-top: 10px; 
+  }
