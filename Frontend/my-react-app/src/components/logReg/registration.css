@@ -1,0 +1,64 @@
+.fullPageDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150vh;
+    background-color: #f0f0f0;
+  }
+  
+  .formDiv {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+  }
+  
+  .formDiv label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .formDiv input[type="text"],
+  .formDiv input[type="password"],
+  .formDiv input[type="date"],
+  .formDiv select,
+  .formDiv input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .formDiv select {
+    appearance: none;
+    background: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat right 10px center/10px 10px;
+    padding-right: 30px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  
+  .formDiv button[type="submit"] {
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .formDiv button[type="submit"]:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Dodatak da polja budu jedno iznad drugog */
+  .formDiv > div {
+    margin-bottom: 15px;
+  }
+  

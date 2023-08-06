@@ -1,0 +1,53 @@
+.fullPageDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+  }
+  
+  .formDiv {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    width: 300px;
+  }
+  
+  .usernameDiv,
+  .passwordDiv {
+    margin-bottom: 10px;
+  }
+  
+  .usernameDiv label,
+  .passwordDiv label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="password"],
+  button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .submitDiv {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .linkDiv {
+    margin-top: 10px;
+    text-align: right;
+  }
+  
