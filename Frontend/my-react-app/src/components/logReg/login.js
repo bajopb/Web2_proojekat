@@ -1,22 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
+import api from "../../api/axios.js"
 
 
 const Login=()=>{
 
     const [credentials, setCredentials]=useState({
-        username:"",
+        email:"",
         password:""
     });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        
-    
-      };
+        const result=await api.post('api/User/login', credentials)
+        console.log(result.token);
+        if(result.status===200)
+            localStorage.setItem('token', result.data.token)
+        alert(result.data.result);
+        alert(result.data.token);
+        };
 
     
 
@@ -25,8 +28,8 @@ const Login=()=>{
             <div className="formDiv">
                 <form onSubmit={handleSubmit}>
                     <div className="usernameDiv">
-                    <label>Unesite email ili korisnicko ime</label>
-                    <input type="text" required onInvalid={(e) => e.target.setCustomValidity('Ovo polje je obavezno')} onInput={(e) => e.target.setCustomValidity('')} name="username" onChange={(e)=>setCredentials({...credentials, username:e.target.value})} value={credentials.username }/>
+                    <label>Unesite email</label>
+                    <input type="text" required onInvalid={(e) => e.target.setCustomValidity('Ovo polje je obavezno')} onInput={(e) => e.target.setCustomValidity('')} name="username" onChange={(e)=>setCredentials({...credentials, email:e.target.value})} value={credentials.email }/>
                     </div> 
                     <div className="passwordDiv">
                     <label>Unesite lozinku</label>

@@ -17,7 +17,7 @@ namespace WebAPK.Controllers
             this.sellerSerivice = sellerSerivice;
         }
         [HttpPost("addProduct")]
-        [Authorize(Roles ='prodavac')]
+        [Authorize(Roles ="prodavac")]
         public async Task<IActionResult> AddProduct(ProductDTO productDTO)
         {
             ResponseDTO response=await sellerSerivice.AddProduct(productDTO);

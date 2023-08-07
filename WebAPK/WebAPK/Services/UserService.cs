@@ -32,7 +32,7 @@ namespace WebAPK.Services
         public async Task<ResponseDTO> Login(LoginDTO loginDto)
         {
             User u = new User();
-            if (string.IsNullOrEmpty(loginDto.Email) && string.IsNullOrEmpty(loginDto.Username))
+            if (string.IsNullOrEmpty(loginDto.Email))
             {
                 return new ResponseDTO("Polje za unos korisnickog imena ili mejl adrese ne sme biti prazno");
             }
@@ -40,15 +40,18 @@ namespace WebAPK.Services
             {
                 return new ResponseDTO("Polje za unos lozinke ne sme biti prazno");
             }
-            u = await _dbContext.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email || x.Username==loginDto.Username);
+            u = await _dbContext.Users.FirstOrDefaultAsync(x => x.Email==loginDto.Email);
 
-            if (u != null)
+            if (u == null)
             {
-                return new ResponseDTO("Korisnik sa unetim kredencijalima ne postoji");
+                return new ResponseDTO("Korisnik"+loginDto.Email+" "+loginDto.Password+" sa unetim kredencijalima ne postoji");
             }
 
-            if (BCrypt.Net.BCrypt.Verify(loginDto.Password, loginDto.Password))
-            {
+
+
+            if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, u.Password)) // u.Password je heširana lozinka iz baze
+                return new ResponseDTO("Neispravna lozinka");
+            
                 List<Claim> claims=new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Name,u.Username));
                 claims.Add(new Claim(ClaimTypes.Email,u.Email));
@@ -63,10 +66,8 @@ namespace WebAPK.Services
                                     signingCredentials: signInCredentials
                                     );
                 string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                UserDTO korisnikDto = _mapper.Map<UserDTO>(loginDto);
                 return new ResponseDTO(token, "Uspesno ste se ulogovali.");
-            }
-            return new ResponseDTO("Korisnik sa unetim kredencijalima ne postoji");
+            
         }
 
         public async Task<ResponseDTO> Register(RegisterDTO registerDto)

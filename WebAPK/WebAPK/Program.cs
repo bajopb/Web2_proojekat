@@ -8,14 +8,18 @@ using WebAPK.DTO;
 using WebAPK.Interfaces;
 using WebAPK.Services;
 using Microsoft.AspNetCore.Authentication.Google;
-
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Web2DbContext>(opt =>
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
@@ -59,12 +63,14 @@ builder.Services.AddScoped<IBuyerService, BuyerService>();
 builder.Services.AddScoped<ISellerSerivice, SellerService>();
 builder.Services.AddAutoMapper(typeof(DtoMapper));
 
-builder.Services.AddCors( o =>
+builder.Services.AddCors(options =>
 {
-    o.AddPolicy("All", p =>
-    {
-        p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-    });
+    options.AddPolicy("AllowLocalhost3000",
+        builder => builder
+            .WithOrigins("http://localhost:3000") // Adresa vaše React aplikacije
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+    );
 });
 
 
@@ -73,23 +79,20 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(o =>
+}).AddJwtBearer(x =>
 {
-    o.TokenValidationParameters = new TokenValidationParameters
+    x.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey
-        (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        (Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings" +
+        ":Key"])),
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
-        ValidateIssuerSigningKey = true
+        ValidateIssuerSigningKey = true 
     };
-}).AddGoogle(o =>
-{
-    o.ClientId = builder.Configuration["Google:ClientID"];
-    o.ClientSecret = builder.Configuration["Google:ClientSecret"];
 });
 
 builder.Services.AddAuthorization();
@@ -103,7 +106,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("All");
+app.UseCors("AllowLocalhost3000");
 
 
 app.UseHttpsRedirection();
