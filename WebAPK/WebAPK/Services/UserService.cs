@@ -52,12 +52,15 @@ namespace WebAPK.Services
             if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, u.Password)) // u.Password je heširana lozinka iz baze
                 return new ResponseDTO("Neispravna lozinka");
             
-                List<Claim> claims=new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Name,u.Username));
-                claims.Add(new Claim(ClaimTypes.Email,u.Email));
-                claims.Add(new Claim(ClaimTypes.Role,u.Type.ToString()));
-
-                SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey.Value));
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, u.Username!),
+                new Claim(ClaimTypes.Role, u.Type.ToString()),
+                new Claim("Id", u.Id.ToString()),
+                new Claim("Email", u.Email!),
+            };
+            
+            SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey.Value));
                 SigningCredentials signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                 JwtSecurityToken tokenOptions = new JwtSecurityToken(
                                     issuer: "http://localhost:44385",
@@ -101,10 +104,10 @@ namespace WebAPK.Services
             {
                 return new ResponseDTO("Niste uneli datum rodjenja");
             }
-            if (_dbContext.Users.FirstOrDefaultAsync(x => x.Email == registerDto.Email) != null) {
+            if (await _dbContext.Users.FirstOrDefaultAsync(x => x.Email == registerDto.Email) != null) {
                 return new ResponseDTO("Korisnik sa datim mejlom vec postoji");
             }
-            if (_dbContext.Users.FirstOrDefaultAsync(x =>  x.Username == registerDto.Username) != null)
+            if (await _dbContext.Users.FirstOrDefaultAsync(x =>  x.Username == registerDto.Username) != null)
             {
                 return new ResponseDTO("Korisnik sa datim korisnickim imenom vec postoji");
             }
@@ -124,11 +127,13 @@ namespace WebAPK.Services
             _dbContext.Users.Add(u);
             await _dbContext.SaveChangesAsync();
 
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, u.Username));
-            claims.Add(new Claim(ClaimTypes.Email, u.Email));
-            claims.Add(new Claim(ClaimTypes.Role, u.Type.ToString()));
-
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, u.Username!),
+                new Claim(ClaimTypes.Role, u.Type.ToString()),
+                new Claim("Id", u.Id.ToString()),
+                new Claim("Email", u.Email!),
+            };
             SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey.Value));
             SigningCredentials signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             JwtSecurityToken tokenOptions = new JwtSecurityToken(

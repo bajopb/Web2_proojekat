@@ -21,6 +21,6 @@ namespace WebAPK.DTO
         public TipKorisnika Type { get; set; }
 
 
-        public byte[]? Image { get; set; }
+        public IFormFile[]? ImageFile { get; set; }
     }
 }

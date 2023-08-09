@@ -2,6 +2,6 @@
 {
     public enum TipKorisnika
     {
-        Administrator=0, Prodavac=1, Kupac=2
+        Administrator=0, Kupac = 1, Prodavac =2 
     }
 }

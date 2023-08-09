@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import api from "../../api/axios.js"
+import Dashboard from "../dashboard/dashboard.js";
 
 
 const Login=()=>{
@@ -10,15 +11,15 @@ const Login=()=>{
         email:"",
         password:""
     });
-
+    const navigate=useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
         const result=await api.post('api/User/login', credentials)
-        console.log(result.token);
-        if(result.status===200)
+        if(result.status===200){
             localStorage.setItem('token', result.data.token)
-        alert(result.data.result);
-        alert(result.data.token);
+            console.log(result.data.token);
+            navigate('/dashboard');
+        }
         };
 
     

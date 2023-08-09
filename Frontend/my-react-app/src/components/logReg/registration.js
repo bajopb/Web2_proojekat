@@ -1,6 +1,8 @@
 import React from "react";
 import "../logReg/registration.css"
-import { useState } from "react";
+import { useState} from "react";
+import api from "../../api/axios.js"
+import { useNavigate } from "react-router-dom";
 
 const Registration=()=>{
 
@@ -8,27 +10,50 @@ const Registration=()=>{
         username:"",
         email:"",
         password:"",
-        passwordConfirm:"",
-        name:"",
+        firstname:"",
         lastname:"",
         address:"",
         birthday:"",
         type:"",
         imageFile:""
-    })
+    });
+    const navigate=useNavigate();
+    const [password2, setPassword2]=useState("");
 
-    const handleSubmit=(e)=>{
+    const handleSubmit= async(e)=>{
         e.preventDefault();
-        if(!regInfo.username || !regInfo.email || !regInfo.password || !regInfo.passwordConfirm || !regInfo.name || !regInfo.lastname || !regInfo.address || !regInfo.birthday || !regInfo.type || !regInfo.imageFile){
+        if(!regInfo.username || !regInfo.email || !regInfo.password || !password2 || !regInfo.firstname || !regInfo.lastname || !regInfo.address || !regInfo.birthday || !regInfo.type){
             alert("Sva polja su obavezna");
+            return;
         }
 
-        if(regInfo.password!==regInfo.passwordConfirm)
+        if(!regInfo.password===password2)
         {
             alert("Lozinke se ne poklapaju");
+            return;
         }
+        const formData=new FormData();
+        formData.append("username", regInfo.username);
+        formData.append("email", regInfo.email);
+        formData.append("password", regInfo.password);
+        formData.append("firstName", regInfo.firstname);
+        formData.append("lastName", regInfo.lastname);
+        formData.append("address", regInfo.address);
+        formData.append("birthday", regInfo.birthday);
+        formData.append("type", regInfo.type);
+        formData.append("imageFile", regInfo.imageFile);
+
+        const result = await api.post('api/User/register', regInfo, { headers: { "Content-Type":"multipart/form-data" }
+          });
+         console.log(result.token);
+        if(result.status===200){
+            localStorage.setItem('token', result.data.token)
+            navigate("/dashboard");
+        }
+        
     };
 
+    
     
 
     return(
@@ -45,7 +70,7 @@ const Registration=()=>{
                     </div>
                     <div className="passwordDiv">
                         <label>Potvrdite lozinku</label>
-                        <input type="password" required onInvalid={(e) => e.target.setCustomValidity('Ovo polje je obavezno')} onInput={(e) => e.target.setCustomValidity('')}  onChange={(e)=>setRegInfo({...regInfo, passwordConfirm:e.target.value})}  value={regInfo.passwordConfirm} name="passwordConfirm"/>
+                        <input type="password" required onInvalid={(e) => e.target.setCustomValidity('Ovo polje je obavezno')} onInput={(e) => e.target.setCustomValidity('')}    onChange={(e) => setPassword2(e.target.value)}  value={regInfo.password2} name="passwordConfirm"/>
                     </div>
                     <div className="emailDiv">
                         <label>Unesite email</label>
@@ -53,7 +78,7 @@ const Registration=()=>{
                     </div>
                     <div className="nameDiv">
                         <label>Unesite ime</label>
-                        <input type="text" required onInvalid={(e) => e.target.setCustomValidity('Ovo polje je obavezno')} onInput={(e) => e.target.setCustomValidity('')}  onChange={(e)=>setRegInfo({...regInfo, name:e.target.value})}  value={regInfo.name} name="name"/>
+                        <input type="text" required onInvalid={(e) => e.target.setCustomValidity('Ovo polje je obavezno')} onInput={(e) => e.target.setCustomValidity('')}  onChange={(e)=>setRegInfo({...regInfo, firstname:e.target.value})}  value={regInfo.firstname} name="name"/>
                     </div>
                     <div className="lastNameDiv">
                         <label>Unesite prezime</label>
@@ -77,7 +102,7 @@ const Registration=()=>{
                     </div>
                     <div className="imageDiv">
                         <label>Unseite vasu fotografiju</label>
-                        <input type="file" value={regInfo.imageFile} required onInvalid={(e) => e.target.setCustomValidity('Ovo polje je obavezno')} onInput={(e) => e.target.setCustomValidity('')}  onChange={(e)=>setRegInfo({...regInfo, imageFile:e.target.value})}  accept="image/*" name="image"/>
+                        <input type="file" value={regInfo.imageFile}  /* onInput={(e) => e.target.setCustomValidity('')}*/  onChange={(e)=>setRegInfo({...regInfo, imageFile:e.target.value})}  accept="image/*" name="image"/>
                     </div>
                     <div className="submitDiv">
                         <button type="submit">Registrujte se</button>

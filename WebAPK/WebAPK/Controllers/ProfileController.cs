@@ -16,7 +16,7 @@ namespace WebAPK.Controllers
             this.profileService = profileService;
         }
 
-        [HttpGet("showProfile")]
+        [HttpGet("showProfile/{id}")]
         public async Task<IActionResult> showProfile(int id)
         {
             UserDTO user=await profileService.ShowProfile(id);

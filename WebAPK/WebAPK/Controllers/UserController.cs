@@ -26,8 +26,9 @@ namespace WebAPK.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDTO regDto)
+        public async Task<IActionResult> Register([FromForm]RegisterDTO regDto)
         {
+            
             ResponseDTO response = await userService.Register(regDto);
             if (string.IsNullOrEmpty(response.Token))
             {

@@ -1,0 +1,38 @@
+.dashboardDiv {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+
+.leftSideDiv {
+  height: 100vh;
+  flex: 1;
+  width: 20%; /* Promenjeno sa height na width */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgray; /* Boja pozadine */
+  padding: 20px;
+}
+
+.rightSideDiv {
+  flex: 2;
+  height: 100vh; /* Visina desna strana ekrana */
+  background-color: lightblue; /* Boja pozadine */
+  padding: 20%;
+}
+
+.links button{
+  width: 200px; /* Željena širina dugmadi */
+  height: 40px;
+  margin: 5px 0;
+  background-color: blue;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+}
