@@ -40,6 +40,13 @@ namespace WebAPK.Services
             return new ResponseDTO("Dozvoljeno vreme za otkazivanje porudzbine je isteklo");
         }
 
+        public async Task<List<ProductDTO>> GetAllProducts()
+        {
+            var products = await _dbContext.Products.ToListAsync();
+            var productDTOs = _mapper.Map<List<ProductDTO>>(products);
+            return productDTOs;
+        }
+
         public async Task<ResponseDTO> NewOrder(OrderDTO orderDto, int buyerID)
         {
             Order o=_mapper.Map<Order>(orderDto);

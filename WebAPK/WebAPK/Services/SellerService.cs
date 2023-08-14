@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPK.Configuration;
 using WebAPK.DTO;
@@ -41,7 +42,7 @@ namespace WebAPK.Services
             }
 
             // Provera da li je Image null
-            if (productDto.Image == null)
+            if (productDto.ImageFile == null)
             {
                 return new ResponseDTO("Niste uneli fotografiju");
             }

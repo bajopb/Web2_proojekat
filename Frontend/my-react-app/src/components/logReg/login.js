@@ -2,15 +2,15 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import api from "../../api/axios.js"
-import Dashboard from "../dashboard/dashboard.js";
-
+import AuthContext from "../../context/contextProvider.js";
+import { useContext } from "react";
 
 const Login=()=>{
-
     const [credentials, setCredentials]=useState({
         email:"",
         password:""
     });
+    const context=useContext(AuthContext);
     const navigate=useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,6 +25,7 @@ const Login=()=>{
     
 
     return(
+        
         <div className="fullPageDiv">
             <div className="formDiv">
                 <form onSubmit={handleSubmit}>

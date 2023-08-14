@@ -18,10 +18,10 @@ namespace WebAPK.Controllers
             this.adminService = adminService;
         }
         [HttpGet("getAllSellers")]
-        [Authorize(Roles ="admin")]
+        //[Authorize(Roles ="admin")]
         public async Task<IActionResult> getAllSellers()
         {
-            List<UserDTO> users=await adminService.GetAllSellers();
+            List<SellerDTO> users = await adminService.GetAllSellers();
             if (users == null)
             {
                 return BadRequest(users);
@@ -42,15 +42,17 @@ namespace WebAPK.Controllers
         }
 
         [HttpPost("setStatus")]
-        [Authorize(Roles ="admin")]
-        public async Task<IActionResult> SetStatus(int id, VerifikacijaStatus status)
+       // [Authorize(Roles ="admin")]
+        public async Task<IActionResult> SetStatus([FromBody]VerificationDTO verificationDto)
         {
-            ResponseDTO response=await adminService.SetStatus(id, status);  
+            ResponseDTO response=await adminService.SetStatus(verificationDto.Id, verificationDto.VerificationStatus    );
+            if (response.Result == "Korisnik ne postoji")
+                return BadRequest("Korisnik ne postoji");
             return Ok(response);
         }
 
         [HttpGet("getAllOrders")]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         public async Task<IActionResult> getAllOrders() { 
             List<OrderDTO> orders=await adminService.GetAllOrders();
             if(orders == null)

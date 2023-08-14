@@ -17,15 +17,15 @@ namespace WebAPK.Controllers
             this.sellerSerivice = sellerSerivice;
         }
         [HttpPost("addProduct")]
-        [Authorize(Roles ="prodavac")]
-        public async Task<IActionResult> AddProduct(ProductDTO productDTO)
+        //[Authorize(Roles ="Prodavac")]
+        public async Task<IActionResult> AddProduct([FromForm]ProductDTO productDTO)
         {
             ResponseDTO response=await sellerSerivice.AddProduct(productDTO);
             return Ok(response);
         }
 
         [HttpPut("editProduct")]
-        [Authorize(Roles ="prodavac")]
+        //[Authorize(Roles ="Prodavac")]
         public async Task<IActionResult> EditProduct(ProductDTO productDTO) {
             ProductDTO product = await sellerSerivice.EditProduct(productDTO);
             if (product == null) {
@@ -36,7 +36,7 @@ namespace WebAPK.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles ="prodavac")]
+        [Authorize(Roles ="Prodavac")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
 
@@ -48,7 +48,7 @@ namespace WebAPK.Controllers
         //Dodati metodu koja je ostala
 
         [HttpGet("orderHistory/{id}")]
-        [Authorize(Roles ="prodavac")]
+        //[Authorize(Roles ="Prodavac")]
         public async Task<IActionResult> OrderHistory(int id)
         {
             List<OrderDTO> orderList = await sellerSerivice.OrdersHistory(id);

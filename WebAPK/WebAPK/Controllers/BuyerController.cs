@@ -18,7 +18,6 @@ namespace WebAPK.Controllers
         }
 
         [HttpPost("newOrder")]
-        [Authorize(Roles ="kupac")]
         public async Task<IActionResult> newOrder(OrderDTO orderDTO)
         {
             ResponseDTO response = await buyerService.NewOrder(orderDTO, orderDTO.UserId);
@@ -26,7 +25,6 @@ namespace WebAPK.Controllers
         }
 
         [HttpPost("cancelOrder")]
-        [Authorize(Roles ="kupac")]
         public async Task<IActionResult> cancelOrder(int id)
         {
             ResponseDTO response=await buyerService.CancelOrder(id);
@@ -34,7 +32,6 @@ namespace WebAPK.Controllers
         }
 
         [HttpGet("oredrHistory")]
-        [Authorize(Roles = "kupac")]
         public async Task<IActionResult> orderHistory(int id) {
             List<OrderDTO> orders = await buyerService.OrderHistory(id);
             if (orders == null)
@@ -42,6 +39,13 @@ namespace WebAPK.Controllers
                 return BadRequest("Nema porudzbina za prikazivanje");
             }
             return Ok(orders);
+        }
+
+        [HttpGet("getAllProducts")]
+        public async Task<IActionResult> getAllProducts() {
+            List<ProductDTO> products = await buyerService.GetAllProducts();
+            
+            return Ok(products);
         }
 
     }

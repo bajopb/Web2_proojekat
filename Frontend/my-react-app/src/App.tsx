@@ -5,19 +5,25 @@ import Registration from "../src/components/logReg/registration";
 import Dashboard from "./components/dashboard/dashboard";
 import AuthContext from "./context/contextProvider";
 import {useContext} from 'react';
-import AddItem from "./components/seller/addItem";
+import AddItem from "./components/seller/addItem.js";
+import OrderListAdmin from "../src/components/admin/allOrders";
 
 
 const App = () => {
-  const context=useContext(AuthContext)
+  
+
+
+
+  const context=useContext(AuthContext);
+ 
   return (
-    <Router>
+   
       <Routes>
-        <Route path="/" element={<Dashboard/>} />
+        <Route path="/" element={<Login/>} />
         <Route path="/registration" element={<Registration/>} />
-        <Route path="/dashboard" element={context.token? <Dashboard/>:<Login/>}/>
+        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/addItem" element={<AddItem/>}/>
       </Routes>
-    </Router>
   );
 };
 

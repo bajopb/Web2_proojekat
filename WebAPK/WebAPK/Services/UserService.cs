@@ -20,13 +20,13 @@ namespace WebAPK.Services
     {
         private readonly IMapper _mapper;
         private readonly Web2DbContext _dbContext;
-        private readonly IConfigurationSection _secretKey;
+        private readonly IConfiguration _configuration;
 
         public UserService(IMapper mapper, Web2DbContext dbContext, IConfiguration configuration)
         {
             _mapper = mapper;
             _dbContext = dbContext;
-            _secretKey = configuration.GetSection("SecretKey");
+            _configuration = configuration;
         }
 
         public async Task<ResponseDTO> Login(LoginDTO loginDto)
@@ -60,21 +60,24 @@ namespace WebAPK.Services
                 new Claim("Email", u.Email!),
             };
             
-            SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey.Value));
-                SigningCredentials signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                JwtSecurityToken tokenOptions = new JwtSecurityToken(
-                                    issuer: "http://localhost:44385",
-                                    claims: claims,
-                                    expires: DateTime.Now.AddMinutes(40),
-                                    signingCredentials: signInCredentials
-                                    );
+                SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]!));
+                    SigningCredentials signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                    JwtSecurityToken tokenOptions = new JwtSecurityToken(
+                                        issuer: "http://localhost:44391",
+                                        _configuration["JwtSettings:Audience"],
+                                        claims: claims,
+                                        expires: DateTime.Now.AddMinutes(40),
+                                        signingCredentials: signInCredentials
+                                        );
                 string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                return new ResponseDTO(token, "Uspesno ste se ulogovali.");
+                Console.WriteLine(token);
+                return new ResponseDTO(token, "Uspesno ste se ulogovali."); 
             
         }
 
         public async Task<ResponseDTO> Register(RegisterDTO registerDto)
         {
+            Console.WriteLine( "tusam");
             if (string.IsNullOrEmpty(registerDto.Email))
             {
                 return new ResponseDTO("Niste uneli email");
@@ -134,15 +137,18 @@ namespace WebAPK.Services
                 new Claim("Id", u.Id.ToString()),
                 new Claim("Email", u.Email!),
             };
-            SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey.Value));
+            SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]!));
             SigningCredentials signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             JwtSecurityToken tokenOptions = new JwtSecurityToken(
-                issuer: "http://localhost:44385",
+                issuer: "http://localhost:44391",
+                _configuration["JwtSettings:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(40),
                 signingCredentials: signInCredentials
                 );
             string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            Console.WriteLine(token);
+            await Console.Out.WriteLineAsync(   "tusam");
             return new ResponseDTO(token, "Uspesna registracija.");
         }
     }
