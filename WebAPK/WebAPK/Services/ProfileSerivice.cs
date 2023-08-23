@@ -23,15 +23,10 @@ namespace WebAPK.Services
             if (u == null) {
                 return new ResponseDTO("Profil ne postoji");
             }
-            if (!string.IsNullOrEmpty(editDTO.NewPassword)) {
-                if (BCrypt.Net.BCrypt.Verify(u.Password, editDTO.OldPassword)) {
-                    return new ResponseDTO("Lozinke se ne poklapaju");
-                }
-                u.Password = BCrypt.Net.BCrypt.HashPassword(editDTO.NewPassword);
-            }
+          
             if (!string.IsNullOrEmpty(editDTO.Username)) {
-                if ((await _dbContext.Users.FirstOrDefaultAsync(x => x.Username == editDTO.Username) != null)){
-                    return new ResponseDTO("Korisnik sa tim korisnickim imenom vec postoji");
+                if ((await _dbContext.Users.FirstOrDefaultAsync(x => x.Username == editDTO.Username) == null)){
+                    return new ResponseDTO("Korisnik sa tim korisnickim imenom ne postoji");
                 }
                 u.Username = editDTO.Username;
             }

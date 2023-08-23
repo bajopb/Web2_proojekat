@@ -1,15 +1,14 @@
 ﻿using WebAPK.Models.Enums;
-using WebAPK.Models;
 
 namespace WebAPK.DTO
 {
-    public class ProfileEditDTO
+    public class SellerDTO
     {
+        public int Id { get; set; }
 
         public string Username { get; set; } = null!;
 
-        public string Password { get; set; } = null!;
-
+        public string Email { get; set; } = null!;
 
         public string Firstname { get; set; } = null!;
 
@@ -19,10 +18,7 @@ namespace WebAPK.DTO
 
         public string Address { get; set; } = null!;
 
-
-
         public byte[]? Image { get; set; }
-
-        public IFormFile? ImageFile { get; set; }
+        public VerifikacijaStatus VerificationStatus { get; set; }
     }
 }

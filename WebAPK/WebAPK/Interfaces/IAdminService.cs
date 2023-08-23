@@ -5,7 +5,7 @@ namespace WebAPK.Interfaces
 {
     public interface IAdminService
     {
-        public Task<List<UserDTO>> GetAllSellers();
+        public Task<List<SellerDTO>> GetAllSellers();
         public Task<List<UserDTO>> GetVerifiedSellers();
 
         public Task<ResponseDTO> SetStatus(int profileID, VerifikacijaStatus status);

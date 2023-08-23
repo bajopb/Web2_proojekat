@@ -7,6 +7,7 @@ namespace WebAPK.Interfaces
         public Task<ResponseDTO> NewOrder(OrderDTO orderDto, int buyerID);
         public Task<ResponseDTO> CancelOrder(int orderID);
         public Task<List<OrderDTO>> OrderHistory(int profileID);
+        public Task<List<ProductDTO>> GetAllProducts();
 
     }
 }

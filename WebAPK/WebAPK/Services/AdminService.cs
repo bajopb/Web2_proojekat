@@ -22,9 +22,9 @@ namespace WebAPK.Services
             return _mapper.Map<List<OrderDTO>>(await  _dbContext.Orders.ToListAsync());
         }
 
-        public async Task<List<UserDTO>> GetAllSellers()
+        public async Task<List<SellerDTO>> GetAllSellers()
         {
-            return _mapper.Map<List<UserDTO>>(await _dbContext.Users.Where(x=>x.Type==TipKorisnika.Prodavac).ToListAsync());
+            return _mapper.Map<List<SellerDTO>>(await _dbContext.Users.Where(x=>x.Type==TipKorisnika.Prodavac).ToListAsync());
         }
 
         public async  Task<List<UserDTO>> GetVerifiedSellers()

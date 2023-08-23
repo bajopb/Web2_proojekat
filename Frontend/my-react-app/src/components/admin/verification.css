@@ -1,0 +1,30 @@
+.verificationList {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .verificationItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 10px;
+    background-color: #cce5ff; /* Plava pozadina */
+    border-radius: 10px;
+  }
+  
+  .verificationActions button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .approveIcon {
+    color: green;
+  }
+  
+  .rejectIcon {
+    color: red;
+  }
+  

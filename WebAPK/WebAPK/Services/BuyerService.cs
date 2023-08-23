@@ -40,6 +40,13 @@ namespace WebAPK.Services
             return new ResponseDTO("Dozvoljeno vreme za otkazivanje porudzbine je isteklo");
         }
 
+        public async Task<List<ProductDTO>> GetAllProducts()
+        {
+            var products = await _dbContext.Products.ToListAsync();
+            var productDTOs = _mapper.Map<List<ProductDTO>>(products);
+            return productDTOs;
+        }
+
         public async Task<ResponseDTO> NewOrder(OrderDTO orderDto, int buyerID)
         {
             Order o=_mapper.Map<Order>(orderDto);
@@ -67,10 +74,12 @@ namespace WebAPK.Services
 
         public async Task<List<OrderDTO>> OrderHistory(int profileID)
         {
-            User u = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == profileID);
-            if (u == null)
-                return null;
-            return _mapper.Map<List<OrderDTO>>(u.Orders.FindAll(x=>x.IsCancelled).OrderByDescending(x=>x.OrderTime));
+            List<Order> orders = await _dbContext.Orders.Where(x=>x.UserId==profileID).ToListAsync();
+
+            List<OrderDTO> order = _mapper.Map<List<OrderDTO>>(orders);
+
+            return order;
         }
+
     }
 }
