@@ -14,15 +14,21 @@ const Login=()=>{
     const navigate=useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const result=await api.post('api/User/login', credentials)
-        if(result.status===200){
-            localStorage.setItem('token', result.data.token)
-            console.log(result.data.token);
-            navigate('/dashboard');
+        
+        if(!credentials.email && !credentials.password)
+        {
+            alert("Oba polja su obavezna");
         }
-        };
+        if(!credentials.email){
+            alert("Unesite email")
+        }
+        if(!credentials.password){
+            alert("Unseite lozinku");
+        }
+        await context.onLogin(credentials);    
+    };
 
-    
+   
 
     return(
         

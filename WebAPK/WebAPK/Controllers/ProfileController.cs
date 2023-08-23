@@ -27,11 +27,12 @@ namespace WebAPK.Controllers
             return Ok(user);
         }
 
-        [HttpPut("editProfile")]
-        public async Task<IActionResult> editProfile(int id, ProfileEditDTO edit)
+        [HttpPut("editProfile/{id}")]
+        public async Task<IActionResult> editProfile(int id, [FromForm] ProfileEditDTO edit)
         {
-            ResponseDTO response=await profileService.EditProfile(id,edit);
+            ResponseDTO response = await profileService.EditProfile(id, edit);
             return Ok(response);
         }
+
     }
 }

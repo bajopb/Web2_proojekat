@@ -31,15 +31,19 @@ namespace WebAPK.Controllers
             return Ok(response);
         }
 
-        [HttpGet("oredrHistory")]
-        public async Task<IActionResult> orderHistory(int id) {
+        [HttpGet("orderHistory/{id}")]
+        public async Task<IActionResult> OrderHistory(int id)
+        {
             List<OrderDTO> orders = await buyerService.OrderHistory(id);
+
             if (orders == null)
             {
-                return BadRequest("Nema porudzbina za prikazivanje");
+                return BadRequest("Nema porudžbina za prikazivanje");
             }
+
             return Ok(orders);
         }
+
 
         [HttpGet("getAllProducts")]
         public async Task<IActionResult> getAllProducts() {

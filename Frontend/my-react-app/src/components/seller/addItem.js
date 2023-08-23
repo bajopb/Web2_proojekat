@@ -75,11 +75,19 @@ const AddItem = () => {
       });
      console.log(result);
     if(result.status===200){
-        alert("Uspesno ste dodali proizvod")
-        navigate("/addItem");
+        alert("Uspesno ste dodali proizvod");
+        setProductInfo({
+          name: '',
+          price: '',
+          amount: '',
+          description: '',
+          imageFile: ''
+      });        navigate("/dashboard");
     }
   };
-
+  const convertImage = (img) => {
+    return `data:image/jpg;base64,${img}`;
+  };
   return (
     <div className="addItemDiv">
       <h1>Dodaj novi proizvod</h1>
@@ -126,15 +134,24 @@ const AddItem = () => {
             onChange={handleChange}
           />
         </div>
-
+        <div>
+          <img
+            title="Image"
+            alt="Add"
+            src={productInfo.imageFile ? URL.createObjectURL(productInfo.imageFile) : productInfo.image && convertImage(productInfo.image)}
+            className="image"
+          />
+        </div>
         <div className="inputDiv">
           <label htmlFor="image">Slika</label>
           <input
             type="file"
             id="image"
-            name="image"
+            name="imageFile"
 
-            onChange={handleChange}
+            onChange={(e) => {
+              setProductInfo({ ...productInfo, imageFile: e.target.files[0] });
+            }}
             accept='image/*'
           />
         </div>

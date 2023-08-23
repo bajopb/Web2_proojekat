@@ -5,6 +5,7 @@ using WebAPK.Configuration;
 using WebAPK.DTO;
 using WebAPK.Interfaces;
 using WebAPK.Models;
+using WebAPK.Models.Enums;
 
 namespace WebAPK.Services
 {
@@ -105,7 +106,32 @@ namespace WebAPK.Services
 
         public async Task<List<OrderDTO>> OrdersHistory(int profileID)
         {
-            return _mapper.Map<List<OrderDTO>>(await _dbContext.Orders.Where(x=>x.IsCancelled!=false).ToListAsync());
+            // Pronađi korisnika (prodavca) na osnovu ID-ja
+            User seller = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == profileID);
+            if (seller == null || seller.Type != TipKorisnika.Prodavac)
+            {
+                // Prodavac sa datim ID-jem nije pronađen ili nije tipa "Prodavac"
+                // Možete obraditi ovu situaciju prema potrebi
+                return new List<OrderDTO>();
+            }
+
+            // Dobavi ID-jeve proizvoda koje je ovaj prodavac postavio
+            IEnumerable<int> sellerProductIds = await _dbContext.Products
+                .Where(p => p.SellerId == seller.Id)
+                .Select(p => p.Id)
+                .ToListAsync();
+
+            // Dobavi narudžbine koje sadrže proizvode ovog prodavca
+            List<Order> orders = await _dbContext.Orders
+                .Where(o => o.Items.Any(item => sellerProductIds.Contains(item.ProductId)))
+                .Where(o => o.IsCancelled != true)
+                .ToListAsync();
+
+            // Koristi AutoMapper za mapiranje narudžbina u DTO objekte
+            List<OrderDTO> orderDTOs = _mapper.Map<List<OrderDTO>>(orders);
+
+            return orderDTOs;
         }
+
     }
 }

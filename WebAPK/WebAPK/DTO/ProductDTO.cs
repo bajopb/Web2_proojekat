@@ -14,7 +14,7 @@
 
         public IFormFile? ImageFile { get; set; }
 
-
+        public byte[]? Image { get; set; }  
         public int SellerId { get; set; }
     }
 }

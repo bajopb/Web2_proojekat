@@ -23,14 +23,16 @@ const OrderPage = () => {
   const handleClosePrompt = () => {
     setOpenPrompt(false);
   };
-
+  const convertImage = (img) => {
+    return `data:image/jpg;base64,${img}`;
+  };
   return (
     <div className="orderPage">
       <h1>Katalog Proizvoda</h1>
       <div className="productList">
         {products.map((product) => (
           <div key={product.id} className="productItem">
-            <img src={product.imageFile} alt={product.name} />
+<img src={product.image && convertImage(product.image)} alt={product.name} />
             <h2>{product.name}</h2>
             <p>Cena: ${product.price.toFixed(2)}</p>
             <button onClick={() => handleOrderClick(product)}>Poruči</button>

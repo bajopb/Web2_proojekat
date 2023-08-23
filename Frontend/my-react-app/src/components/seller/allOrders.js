@@ -11,6 +11,7 @@ const OrderList = () => {
     const decodedToken = jwt_decode(token);
     const id = decodedToken.Id;
     api.get(`/api/Seller/orderHistory/${id}`).then((response) => {
+      console.log(id);
       const allOrders = response.data;
       setOrders(allOrders);
       console.log(allOrders);

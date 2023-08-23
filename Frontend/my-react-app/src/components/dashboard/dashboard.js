@@ -15,7 +15,8 @@ import Verification from "../admin/verification";
 import OrderPage from "../buyer/orderPage";
 import AuthContext from "../../context/contextProvider";
 import Login from "../logReg/login";
-
+import OrderList from "../seller/allOrders";
+import MyOrders from "../buyer/myOrders";
 
 const Dashboard = () => {
   const [selectedComponent, setSelectedComponent] = useState(null);
@@ -55,7 +56,7 @@ const Dashboard = () => {
                 Nove porudzbine
               </Button>
             </Link>
-            <Link className="links" onClick={() => openComponent("AllOrders")}>
+            <Link className="links" onClick={() => openComponent("AllOrdersSeller")}>
               <Button startIcon={<ListIcon />} variant="contained">
                 Sve porudzbine
               </Button>
@@ -67,7 +68,7 @@ const Dashboard = () => {
             </Link>
           </>
         )}
-        {context.type()==="Kupac" && (
+        {context.type()==="Administrator" && (
           <>
 
             <Link className="links" onClick={() => openComponent("EditProfile")}>
@@ -92,7 +93,7 @@ const Dashboard = () => {
             </Link>
           </>
         )}
-        { context.type()==="Administrator" && (
+        { context.type()==="Kupac" && (
           <>
 
             <Link className="links" onClick={() => openComponent("EditProfile")}>
@@ -105,11 +106,17 @@ const Dashboard = () => {
                 Katalog
               </Button>
             </Link>
+            <Link className="links" onClick={() => openComponent("MyOrdersBuyer")}>
+              <Button startIcon={<ListIcon />} variant="contained">
+                Sve porudzbine
+              </Button>
+            </Link>
             <Link className="links" onClick={handleLogout}>
               <Button startIcon={<ListIcon />} variant="contained">
                 Odjavi se
               </Button>
             </Link>
+            
           </>
         )}
       </div>
@@ -122,6 +129,8 @@ const Dashboard = () => {
         {selectedComponent === "OrderPage" && <OrderPage />}
         {selectedComponent === "AddItem" && <AddItem />}
         {selectedComponent === "NewOrders" && <NewOrders />}
+        {selectedComponent === "AllOrdersSeller" && <OrderList />}
+        {selectedComponent === "MyOrdersBuyer" && <MyOrders />}
       </div>
     </div>
   );

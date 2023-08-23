@@ -13,7 +13,7 @@ const EditProfile = () => {
         lastname: "",
         address: "",
         birthday: "",
-        type: "",
+        image:"",
         imageFile: ""
     });
     const context=useContext(AuthContext);
@@ -21,14 +21,32 @@ const EditProfile = () => {
 
     useEffect(() => {
         const decodedToken = jwt_decode(token);
-        const id = decodedToken.Id; // Pretpostavljajući da je ID claim nazvan "Id"
+        const id = decodedToken.Id; 
         if (id) {
             api.get(`/api/Profile/showProfile/${id}`).then((response) => {
                 const profileData = response.data;
-                setUserInfo(profileData);
+                const serverDate = new Date(profileData.birthday);
+                const formattedDate = serverDate.toISOString().split('T')[0];
+    
+                // Izdvoji ostala polja koja ne želite da menjate
+                const { username, email, password, firstname, lastname, address, imageFile } = profileData;
+    
+                // Postavi novo stanje samo za datum, a ostala polja ostanu ista
+                setUserInfo(prevUserInfo => ({
+                    ...prevUserInfo,
+                    birthday: formattedDate,
+                    username,
+                    email,
+                    password,
+                    firstname,
+                    lastname,
+                    address,
+                    imageFile
+                }));
             });
         }
-    }, [token]);
+    }, []);
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -38,10 +56,45 @@ const EditProfile = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Dodajte logiku za slanje podataka na server ili ažuriranje korisnika
+    
+        if (!userInfo.username || !userInfo.email || !userInfo.password || !userInfo.firstname || !userInfo.lastname || !userInfo.address || !userInfo.birthday) {
+            alert("Sva polja moraju biti popunjena");
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append('username', userInfo.username);
+        formData.append('email', userInfo.email);
+        formData.append('password', userInfo.password);
+        formData.append('firstname', userInfo.firstname);
+        formData.append('lastname', userInfo.lastname);
+        formData.append('address', userInfo.address);
+        formData.append('birthday', userInfo.birthday);
+        formData.append('imageFile', userInfo.imageFile);
+    
+        try {
+            const decodedToken = jwt_decode(token);
+            const id = decodedToken.Id;
+    
+            // Posalji HTTP PUT zahtev na server sa podacima za izmenu kao form data
+            const response = await api.put(`/api/Profile/editProfile/${id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+    
+            console.log("Podaci su uspešno izmenjeni:", response.data);
+        } catch (error) {
+            console.error("Greška pri izmeni podataka:", error);
+        }
     };
+    
+    
+     const convertImage = (img) => {
+        return `data:image/jpg;base64,${img}`;
+      };
 
     return (
         <div className='editProfileDiv'>
@@ -124,19 +177,14 @@ const EditProfile = () => {
                     />
                 </div>
 
-                <div className='typeDiv'>
-                    <label>Tip</label>
-                    <select
-                        className='inputs'
-                        name='type'
-                        value={userInfo.type}
-                        onChange={handleChange}
-                    >
-                        <option value="">Izaberite tip</option>
-                        <option value="1">Kupac</option>
-                        <option value="2">Prodavac</option>
-                    </select>
-                </div>
+                <div>
+          <img
+            title="Image"
+            alt="Add"
+            src={userInfo.imageFile ? URL.createObjectURL(userInfo.imageFile) : userInfo.image && convertImage(userInfo.image)}
+            className="image"
+          />
+        </div>
 
                 <div className='imageDiv'>
                     <label>Slika</label>
@@ -144,7 +192,9 @@ const EditProfile = () => {
                         type='file'
                         className='inputs'
                         name='imageFile'
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            setUserInfo({ ...userInfo, imageFile: e.target.files[0] });
+                          }}
                     />
                 </div>
 
