@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nikola\\Desktop\\WEB2\\bajopb\\Web2_proojekat\\WebAPK\\WebAPK\\WebAPK.csproj": {}
+    "C:\\Users\\nikola\\source\\repos\\bajopb\\Web2_proojekat\\WebAPK\\WebAPK\\WebAPK.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nikola\\Desktop\\WEB2\\bajopb\\Web2_proojekat\\WebAPK\\WebAPK\\WebAPK.csproj": {
+    "C:\\Users\\nikola\\source\\repos\\bajopb\\Web2_proojekat\\WebAPK\\WebAPK\\WebAPK.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nikola\\Desktop\\WEB2\\bajopb\\Web2_proojekat\\WebAPK\\WebAPK\\WebAPK.csproj",
+        "projectUniqueName": "C:\\Users\\nikola\\source\\repos\\bajopb\\Web2_proojekat\\WebAPK\\WebAPK\\WebAPK.csproj",
         "projectName": "WebAPK",
-        "projectPath": "C:\\Users\\nikola\\Desktop\\WEB2\\bajopb\\Web2_proojekat\\WebAPK\\WebAPK\\WebAPK.csproj",
+        "projectPath": "C:\\Users\\nikola\\source\\repos\\bajopb\\Web2_proojekat\\WebAPK\\WebAPK\\WebAPK.csproj",
         "packagesPath": "C:\\Users\\nikola\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nikola\\Desktop\\WEB2\\bajopb\\Web2_proojekat\\WebAPK\\WebAPK\\obj\\",
+        "outputPath": "C:\\Users\\nikola\\source\\repos\\bajopb\\Web2_proojekat\\WebAPK\\WebAPK\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
