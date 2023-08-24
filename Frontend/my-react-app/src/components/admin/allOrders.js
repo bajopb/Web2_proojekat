@@ -7,14 +7,24 @@ const OrderListAdmin = () => {
   const token=localStorage.getItem('token');
 
   useEffect(() => {
-    // Poziv API-a za dohvaćanje svih porudžbina
-    
-    api.get(`/api/Admin/getAllOrders/`).then((response) => {
-      const allOrders = response.data;
-      setOrders(allOrders);
-      console.log(allOrders);
-    });
-  }, [token]);
+    async function fetchOrders() {
+      try {
+        const response = await api.get(`/api/Admin/getAllOrders/`);
+        console.log('Response from API:', response.data);
+  
+        const allOrders = response.data;
+        setOrders(allOrders);
+  
+        console.log('Updated orders in state:', allOrders);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    }
+  
+    fetchOrders();
+  }, []);
+  
+  
 
   return (
     <div>

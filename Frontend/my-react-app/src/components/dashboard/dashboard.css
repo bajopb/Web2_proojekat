@@ -21,6 +21,7 @@
   height: 100vh; /* Visina desna strana ekrana */
   background-color: lightblue; /* Boja pozadine */
   padding: 20%;
+  overflow: auto;
 }
 
 .links button{

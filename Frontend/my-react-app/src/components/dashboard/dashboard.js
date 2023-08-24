@@ -17,6 +17,7 @@ import AuthContext from "../../context/contextProvider";
 import Login from "../logReg/login";
 import OrderList from "../seller/allOrders";
 import MyOrders from "../buyer/myOrders";
+import MyProducts from "../seller/myProducts";
 
 const Dashboard = () => {
   const [selectedComponent, setSelectedComponent] = useState(null);
@@ -49,6 +50,11 @@ const Dashboard = () => {
             <Link className="links" onClick={() => openComponent("AddItem")}>
               <Button startIcon={<AddIcon />} variant="contained">
                 Dodaj proizvod
+              </Button>
+            </Link>
+            <Link className="links" onClick={() => openComponent("MyProducts")}>
+              <Button startIcon={<ListIcon />} variant="contained">
+                Svi proizvodi
               </Button>
             </Link>
             <Link className="links" onClick={() => openComponent("NewOrders")}>
@@ -86,6 +92,7 @@ const Dashboard = () => {
                 Sve porudzbine
               </Button>
             </Link>
+            
             <Link className="links" onClick={handleLogout}>
               <Button startIcon={<ListIcon />} variant="contained">
                 Odjavi se
@@ -119,18 +126,27 @@ const Dashboard = () => {
             
           </>
         )}
+        {
+          context.type()!=="Prodavac" && context.type()!=="Administrator" && context.type()!=="Kupac" &&(
+            <>
+            <h2>:(</h2>
+            <h2>  Niste jos verifikovani</h2>
+            </>
+          )
+        }
       </div>
 
       <div className="rightSideDiv">
         {selectedComponent === "EditProfile" && <EditProfile />}
-        {selectedComponent === "AllOrdersAdmin" && <AllOrders />}
-        {selectedComponent === "AllOrders" && <AllOrdersAdmin />}
+        {selectedComponent === "AllOrdersAdmin" && <AllOrdersAdmin />}
+        {selectedComponent === "AllOrders" && <AllOrders />}
         {selectedComponent === "Verification" && <Verification />}
         {selectedComponent === "OrderPage" && <OrderPage />}
         {selectedComponent === "AddItem" && <AddItem />}
         {selectedComponent === "NewOrders" && <NewOrders />}
         {selectedComponent === "AllOrdersSeller" && <OrderList />}
         {selectedComponent === "MyOrdersBuyer" && <MyOrders />}
+        {selectedComponent === "MyProducts" && <MyProducts />}
       </div>
     </div>
   );

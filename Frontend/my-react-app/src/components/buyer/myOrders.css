@@ -1,0 +1,14 @@
+.my-orders-container {
+    padding: 20px;
+  }
+  
+  .order-card {
+    border: 1px solid #ccc;
+    background-color: #e0e5e8;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+  }
+  
+  /* Dodatna stilizacija prema potrebi */
+  

@@ -1,11 +1,11 @@
-import React from "react";
+import React, {useContext} from "react";
 import "../logReg/registration.css"
 import { useState} from "react";
 import api from "../../api/axios.js"
 import { useNavigate } from "react-router-dom";
-
+import AuthContext from "../../context/contextProvider";
 const Registration=()=>{
-
+    const contex=useContext(AuthContext);
     const [regInfo, setRegInfo]=useState({
         username:"",
         email:"",
@@ -27,7 +27,7 @@ const Registration=()=>{
             return;
         }
 
-        if(!regInfo.password===password2)
+        if(regInfo.password!==password2)
         {
             alert("Lozinke se ne poklapaju");
             return;
@@ -45,13 +45,17 @@ const Registration=()=>{
 
         const result = await api.post('api/User/register', regInfo, { headers: { "Content-Type":"multipart/form-data" }
           });
-         console.log(result.token);
         if(result.status===200){
-            localStorage.setItem('token', result.data.token)
+            localStorage.setItem('token', result.data.token);
+            contex.token=result.data.token;
             console.log(result.data.token);
-            navigate("/dashboard");
+            
+            navigate("/");
 
         }
+        if(result.data.token==="" || result.data.token===null)
+            alert(result.data.result);
+        
         
     };
 

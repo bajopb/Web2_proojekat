@@ -1,30 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import './verification.css'; // Učitajte CSS fajl za stilizaciju
-import   CheckCircle  from '@material-ui/icons/Add';
-import      Cancel  from '@material-ui/icons/Add';
-import api from '../../api/axios.js'
+import './verification.css';
+import CheckCircle from '@material-ui/icons/Add';
+import Cancel from '@material-ui/icons/Add';
+import api from '../../api/axios.js';
 
 const Verification = ({ sellers }) => {
-
-  const token=localStorage.getItem('token');
-
-  const [allSellers, setAllSellers]=useState([]);
+  const token = localStorage.getItem('token');
+  const [allSellers, setAllSellers] = useState([]);
+  const [verificationStatusFilter, setVerificationStatusFilter] = useState('verifikovani');
 
   useEffect(() => {
-    // Poziv API-a za dohvaćanje svih porudžbina
-    
-    api.get(`/api/Admin/getAllSellers/`).then((response) => {
-      setAllSellers(response.data);
-      console.log(allSellers.length);
-    });
-  }, [token]);
-
+    api.get(`/api/Admin/getAllSellers/`)
+      .then((response) => {
+        setAllSellers(response.data);
+      });
+  }, []);
 
   const handleApprove = (id) => {
-    const status=0;
-    api.post('/api/Admin/setStatus', { id, status })
+    const verificationStatus = 0;
+    api.post('/api/Admin/setStatus', { id, verificationStatus })
       .then((response) => {
-        console.log(response.data);
         setAllSellers((prevSellers) => prevSellers.filter((seller) => seller.id !== id));
       })
       .catch((error) => {
@@ -33,22 +28,42 @@ const Verification = ({ sellers }) => {
   };
   
   const handleReject = (id) => {
-    const status=1;
-    console.log(id);
-    api.post('/api/Admin/setStatus', { id, status })
+    const verificationStatus = 1;
+    api.post('/api/Admin/setStatus', { id, verificationStatus })
       .then((response) => {
-        console.log(response.data);
         setAllSellers((prevSellers) => prevSellers.filter((seller) => seller.id !== id));
       })
       .catch((error) => {
         console.error(error);
-      });  };
+      });
+  };
+
+  const handleFilterChange = (event) => {
+    setVerificationStatusFilter(event.target.value);
+  };
+
+  const filteredSellers = allSellers.filter((seller) => {
+    if (verificationStatusFilter === 'verifikovani') {
+      return seller.verificationStatus === 0;
+    } else if (verificationStatusFilter === 'neverifikovani') {
+      return seller.verificationStatus === 2;
+    }
+    return true;
+  });
+
   return (
     <div className="verificationList">
-      {allSellers.length === 0 ? (
-        <p>Trenutno nema prodavaca za verifikaciju.</p>
+      <div className="filterCombo">
+        <label>Filtriraj po statusu: </label>
+        <select value={verificationStatusFilter} onChange={handleFilterChange}>
+          <option value="verifikovani">Verifikovani</option>
+          <option value="neverifikovani">Neverifikovani</option>
+        </select>
+      </div>
+      {filteredSellers.length === 0 ? (
+        <p>Trenutno nema {verificationStatusFilter === 'verifikovani' ? 'verifikovanih' : 'neverifikovanih'} prodavaca.</p>
       ) : (
-        allSellers.filter((seller)=>seller.verificationStatus==2).map((seller) => (
+        filteredSellers.map((seller) => (
           <div key={seller.id} className="verificationItem">
             <div className="verificationInfo">
               <p>ID: {seller.id}</p>
@@ -59,12 +74,16 @@ const Verification = ({ sellers }) => {
               <p>Email: {seller.email}</p>
             </div>
             <div className="verificationActions">
-              <button onClick={() => handleApprove(seller.id)}>
-                <CheckCircle className="approveIcon"/>
-              </button>
-              <button onClick={() => handleReject(seller.id)}>
-                <Cancel className="rejectIcon" />
-              </button>
+              {seller.verificationStatus !== 0 && (
+                <>
+                  <button onClick={() => handleApprove(seller.id)}>
+                    <CheckCircle className="approveIcon"/>
+                  </button>
+                  <button onClick={() => handleReject(seller.id)}>
+                    <Cancel className="rejectIcon" />
+                  </button>
+                </>
+              )}
             </div>
           </div>
         ))
@@ -72,8 +91,5 @@ const Verification = ({ sellers }) => {
     </div>
   );
 };
-
-
-
 
 export default Verification;

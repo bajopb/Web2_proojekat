@@ -11,12 +11,12 @@ public partial class Item
 
     public int Amount { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = "sas";
 
     public double Price { get; set; }
 
     public int OrderId { get; set; }
 
-    public virtual Order Order { get; set; } = null!;
+    public virtual Order Order { get; set; } 
 
 }

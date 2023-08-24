@@ -15,6 +15,8 @@ namespace WebAPK.DTO
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<Product, ProductDTO>().ReverseMap();
             CreateMap<Product, OrderDTO>().ReverseMap();
+            CreateMap<Order, NewOrderDto>().ReverseMap();
+            CreateMap<Item, NewItemDto>().ReverseMap();
         }
     }
 }

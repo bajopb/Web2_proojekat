@@ -7,6 +7,7 @@ import AuthContext from "./context/contextProvider";
 import {useContext} from 'react';
 import AddItem from "./components/seller/addItem.js";
 import OrderListAdmin from "../src/components/admin/allOrders";
+import OrderPage from "./components/buyer/orderPage";
 
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/registration" element={<Registration/>} />
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/addItem" element={<AddItem/>}/>
+        <Route path="/orderItem" element={<OrderPage/>}/>
       </Routes>
   );
 };

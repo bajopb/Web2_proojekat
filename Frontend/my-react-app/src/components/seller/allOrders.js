@@ -16,7 +16,7 @@ const OrderList = () => {
       setOrders(allOrders);
       console.log(allOrders);
     });
-  }, [token]);
+  }, []);
 
   return (
     <div>

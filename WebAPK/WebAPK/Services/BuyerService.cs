@@ -47,30 +47,54 @@ namespace WebAPK.Services
             return productDTOs;
         }
 
-        public async Task<ResponseDTO> NewOrder(OrderDTO orderDto, int buyerID)
+        public async Task<ResponseDTO> NewOrder(NewOrderDto newOrderDto)
         {
-            Order o=_mapper.Map<Order>(orderDto);
-            User u = await _dbContext.Users.FirstOrDefaultAsync(x=>x.Id==buyerID);
-            if (string.IsNullOrEmpty(orderDto.DeliveryAddress))
+            Order o = _mapper.Map<Order>(newOrderDto);
+            User u = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == newOrderDto.UserId);
+
+            if (string.IsNullOrEmpty(newOrderDto.DeliveryAddress))
                 o.DeliveryAddress = u.Address;
-            o.UserId = buyerID;
+
             o.OrderTime = DateTime.UtcNow;
-            foreach (Item i in o.Items) { 
-                Product p=await _dbContext.Products.FirstOrDefaultAsync(x=>x.Id==i.ProductId);
-                if (i.Amount < 1) return new ResponseDTO("Kolicina ne moze biti manja od 1");
-                if (i.Amount > p.Amount) return new ResponseDTO("Nedovoljno proizvoda u magacinu");
-                p.Amount -= i.Amount;
-                _dbContext.Products.Update(p);
+            o.OrderPrice = 0;
+            o.UserId = newOrderDto.UserId;
+            
+            foreach (NewItemDto newItemDto in newOrderDto.Items)
+            {
+                Product p = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == newItemDto.ProductId);
+                if (p == null)
+                    return new ResponseDTO("Proizvod nije trenutno na stanju");
+
+                if (newItemDto.Amount < 1)
+                    return new ResponseDTO("Količina ne može biti manja od 1");
+
+                if (newItemDto.Amount > p.Amount)
+                    return new ResponseDTO("Nedovoljno proizvoda u magacinu");
+
+                Item i = _mapper.Map<Item>(newItemDto);
                 i.Name = p.Name;
                 i.Price = p.Price;
-                o.OrderPrice += i.Price * i.Amount+250;
-                o.DeliveryTime=DateTime.Now.AddHours(1).AddMinutes(new Random().Next(180));
-                _dbContext.Orders.Add(o);
-                await _dbContext.SaveChangesAsync();
-            }
-            return new ResponseDTO("Uspensno ste kreirali porudzbinu");
+                i.ProductId = p.Id;
+                // Dodajte cenu za svaki proizvod na ukupnu cenu narudžbine
+                o.OrderPrice += i.Price * i.Amount;
+                // Oduzmite količinu naručenih proizvoda iz magacina
+                p.Amount -= i.Amount;
+                _dbContext.Products.Update(p);
 
+                // Dodajte stavku u narudžbinu
+                o.Items.Add(i);
+            }
+
+            o.DeliveryTime = DateTime.Now.AddHours(1).AddMinutes(new Random().Next(180));
+
+            // Dodajte narudžbinu u bazu i sačuvajte promene
+            await _dbContext.Orders.AddAsync(o);
+            await _dbContext.SaveChangesAsync();
+
+            return new ResponseDTO("Uspešno ste kreirali porudžbinu");
         }
+
+
 
         public async Task<List<OrderDTO>> OrderHistory(int profileID)
         {

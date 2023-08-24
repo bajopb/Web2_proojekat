@@ -25,6 +25,14 @@ namespace WebAPK.Controllers
             return Ok(response);
         }
 
+
+        [HttpPost("googleLogin")]
+        public async Task<IActionResult> GoogleLogin([FromBody]string token)
+        {
+            ResponseDTO response = await userService.GoogleLogin(token);
+            return Ok(response);
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm]RegisterDTO regDto)
         {
@@ -32,7 +40,7 @@ namespace WebAPK.Controllers
             ResponseDTO response = await userService.Register(regDto);
             if (string.IsNullOrEmpty(response.Token))
             {
-                return BadRequest(response);
+                return Ok(response);
             }
             return Ok(response);
         }

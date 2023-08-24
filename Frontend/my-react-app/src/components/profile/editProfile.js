@@ -16,9 +16,11 @@ const EditProfile = () => {
         image:"",
         imageFile: ""
     });
+    const[password, setPasswort]=useState("");
+    const[passwordAgain, setPasswortAgain]=useState("");
     const context=useContext(AuthContext);
     const token=localStorage.getItem('token');
-
+    const [isPasswordModified, setIsPasswordModified] = useState(false); // Track password modification
     useEffect(() => {
         const decodedToken = jwt_decode(token);
         const id = decodedToken.Id; 
@@ -59,11 +61,19 @@ const EditProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        if (!userInfo.username || !userInfo.email || !userInfo.password || !userInfo.firstname || !userInfo.lastname || !userInfo.address || !userInfo.birthday) {
+        if(!password){
+            setPasswort(userInfo.password);
+            setPasswortAgain(userInfo.password);
+        }
+        if (!userInfo.username || !userInfo.email || !password || !userInfo.firstname || !userInfo.lastname || !userInfo.address || !userInfo.birthday) {
             alert("Sva polja moraju biti popunjena");
             return;
         }
     
+        if(password!=passwordAgain){
+            alert("Loznike se ne poklapaju");
+            return;
+        }
         const formData = new FormData();
         formData.append('username', userInfo.username);
         formData.append('email', userInfo.email);
@@ -85,12 +95,25 @@ const EditProfile = () => {
                 },
             });
     
-            console.log("Podaci su uspešno izmenjeni:", response.data);
+            alert(response.data.result);
         } catch (error) {
             console.error("Greška pri izmeni podataka:", error);
         }
     };
-    
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setPasswort(newPassword);
+        setUserInfo(prevUserInfo => ({
+            ...prevUserInfo,
+            password: newPassword
+        }));
+        setIsPasswordModified(true);
+    };
+
+    const handlePasswordAgainChange = (e) => {
+        const newPasswordAgain = e.target.value;
+        setPasswortAgain(newPasswordAgain);
+    };
     
      const convertImage = (img) => {
         return `data:image/jpg;base64,${img}`;
@@ -128,9 +151,20 @@ const EditProfile = () => {
                         type='password'
                         className='inputs'
                         name='password'
-                        value={userInfo.password}
-                        onChange={handleChange}
+                        value={password}
+                        onChange={handlePasswordChange}
                     />
+                </div>
+                <div className='passwordDiv'>
+                    <label>Ponovi lozinku</label>
+                    <input
+                    type='password'
+                    className='inputs'
+                    name='passwordAgain'
+                    value={passwordAgain}
+                    onChange={handlePasswordAgainChange}
+                    readOnly={!isPasswordModified} // Conditionally set readOnly based on flag
+                />
                 </div>
 
                 <div className='firstnameDiv'>

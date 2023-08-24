@@ -19,8 +19,6 @@ const userType = () => {
         if(!token)
             return null;
         const tokenDecoded = jwtDecode(token);
-        console.log(tokenDecoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
-        console.log(tokenDecoded);
         return tokenDecoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
     } catch(e) {
         console.log(e);
@@ -47,21 +45,49 @@ const isType = (type) => {
   }
 }
 
+const googleLogin = async (data) => {
+  const idToken = data.credential;
+
+  try {
+    const res = await api.post('api/User/googleLogin', JSON.stringify(idToken), {
+      headers: {
+        'Content-Type': 'application/json' // Postavite odgovarajući Content-Type zaglavlje
+      }
+    });
+    
+    if (!res.data) {
+      return;
+    }
+
+    setToken(res.data.token);
+    localStorage.setItem('token', res.data.token);
+    navigate('/dashboard');
+  } catch (e) {
+    alert(e.response.data.Exception);
+  }
+};
+
 
 const login=async(data)=>{
 
   try {
       const response=await api.post('api/User/Login', data);
+      if(response.data.token===null || response.data.token===""){
+        setToken(response.data.result);
+        alert(response.data.result);
+      }
+      else{
       setToken(response.data.token);
       localStorage.setItem('token', response.data.token);
       navigate('/dashboard');
+      }
   } catch (e){
       alert(e.response.data.Exception);
   }
 }
 
   return (
-    <AuthContext.Provider value={{ token:token, type:userType, onLogout:logoutHandler, onLogin:login}}>
+    <AuthContext.Provider value={{ token:token, type:userType, onLogout:logoutHandler, onLogin:login, googleLogin: googleLogin    }}>
       {children}
     </AuthContext.Provider>
   );

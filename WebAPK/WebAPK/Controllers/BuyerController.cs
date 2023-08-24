@@ -18,13 +18,13 @@ namespace WebAPK.Controllers
         }
 
         [HttpPost("newOrder")]
-        public async Task<IActionResult> newOrder(OrderDTO orderDTO)
+        public async Task<IActionResult> newOrder(NewOrderDto orderDTO)
         {
-            ResponseDTO response = await buyerService.NewOrder(orderDTO, orderDTO.UserId);
+            ResponseDTO response = await buyerService.NewOrder(orderDTO);
             return Ok(response);
         }
 
-        [HttpPost("cancelOrder")]
+        [HttpPost("cancelOrder/{id}")]
         public async Task<IActionResult> cancelOrder(int id)
         {
             ResponseDTO response=await buyerService.CancelOrder(id);

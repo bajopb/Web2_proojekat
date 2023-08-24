@@ -26,8 +26,8 @@ namespace WebAPK.Controllers
 
         [HttpPut("editProduct")]
         //[Authorize(Roles ="Prodavac")]
-        public async Task<IActionResult> EditProduct(ProductDTO productDTO) {
-            ProductDTO product = await sellerSerivice.EditProduct(productDTO);
+        public async Task<IActionResult> EditProduct([FromForm]ProductDTO productDTO) {
+            ResponseDTO product = await sellerSerivice.EditProduct(productDTO);
             if (product == null) {
                 return BadRequest("Artikal ne postoji");
             }
@@ -35,8 +35,7 @@ namespace WebAPK.Controllers
 
         }
 
-        [HttpDelete("{id}")]
-        [Authorize(Roles ="Prodavac")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
 
@@ -46,6 +45,19 @@ namespace WebAPK.Controllers
 
 
         //Dodati metodu koja je ostala
+
+        [HttpGet("listNewOrders/{id}")]
+        //[Authorize(Roles ="Prodavac")]
+        public async Task<IActionResult> ListNewOrders(int id)
+        {
+            List<OrderDTO> orderList = await sellerSerivice.ListNewOrders(id);
+            if (orderList == null)
+            {
+                return BadRequest("Korisnik ne postoji");
+            }
+            return Ok(orderList);
+        }
+
 
         [HttpGet("orderHistory/{id}")]
         //[Authorize(Roles ="Prodavac")]
@@ -59,6 +71,18 @@ namespace WebAPK.Controllers
             return Ok(orderList);
         }
 
+
+        [HttpGet("getAllProducts/{id}")]
+        //[Authorize(Roles ="Prodavac")]
+        public async Task<IActionResult> GetMyProducts(int id)
+        {
+            List<ProductDTO> products = await sellerSerivice.GetMyProducts(id);
+            if (products == null)
+            {
+                return BadRequest("Korisnik ne postoji");
+            }
+            return Ok(products);
+        }
 
     }
 }

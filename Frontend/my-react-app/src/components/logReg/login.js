@@ -4,6 +4,7 @@ import { useState } from "react";
 import api from "../../api/axios.js"
 import AuthContext from "../../context/contextProvider.js";
 import { useContext } from "react";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login=()=>{
     const [credentials, setCredentials]=useState({
@@ -29,7 +30,9 @@ const Login=()=>{
     };
 
    
-
+    const handleGoogleSignIn = async (e) => {
+        await context.googleLogin(e);
+      }
     return(
         
         <div className="fullPageDiv">
@@ -49,6 +52,9 @@ const Login=()=>{
                     <div className="linkDiv">
                         Niste registrovani? <Link to="/registration">Registrujte se ovde</Link>
                     </div>
+                    <div>
+        <GoogleLogin onSuccess={handleGoogleSignIn} onError={e => alert("Invalid google email.")}/>
+      </div>
                 </form>
             </div>
         </div>
